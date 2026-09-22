@@ -1,0 +1,25 @@
+@import "tailwindcss";
+
+:root {
+  --bg: #0a0b0d;
+  --bg-panel: #111318;
+  --bg-panel-2: #161923;
+  --border: #232631;
+  --text: #d7dae0;
+  --text-dim: #7c828f;
+  --accent: #5b8def;
+  --success: #3fb950;
+  --warning: #d29922;
+  --danger: #f85149;
+}
+
+html, body {
+  background: var(--bg);
+  color: var(--text);
+  margin: 0;
+  font-family: -apple-system, "Inter", "Segoe UI", sans-serif;
+}
+
+.mono {
+  font-family: "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+}

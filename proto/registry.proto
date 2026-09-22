@@ -1,0 +1,95 @@
+syntax = "proto3";
+
+package trailmarked.registry;
+
+import "google/protobuf/timestamp.proto";
+
+// CapabilityRegistry is the read side (CQRS) projected from the event log,
+// plus the compiler that folds a successful discovery run into a versioned
+// capability contract. Internal callers (discovery_plane on RunSucceeded,
+// replay_runtime before executing) reach it here over gRPC; the REST and
+// GraphQL surfaces in this same process are for agents and the dashboard.
+service CapabilityRegistry {
+  rpc CompileCapability(CompileRequest) returns (CompileResponse);
+
+  rpc GetCapability(GetCapabilityRequest) returns (Capability);
+
+  // Merges a capability's base definition with a tenant's locator/param
+  // overlay at resolve time; the base is never mutated per tenant.
+  rpc ResolveForTenant(ResolveRequest) returns (Capability);
+
+  rpc ListCapabilities(ListRequest) returns (ListResponse);
+
+  rpc GetVersionHistory(VersionHistoryRequest) returns (VersionHistoryResponse);
+}
+
+message CompileRequest {
+  string discovery_run_id = 1;
+  string capability_id = 2;
+  string tenant_id = 3;
+}
+
+message CompileResponse {
+  string capability_id = 1;
+  int32 version = 2;
+  Compatibility compatibility = 3;
+}
+
+enum Compatibility {
+  UNKNOWN = 0;
+  BACKWARD = 1;
+  FORWARD = 2;
+  BREAKING = 3;
+}
+
+message GetCapabilityRequest {
+  string capability_id = 1;
+  int32 version = 2; // 0 = latest
+}
+
+message ResolveRequest {
+  string capability_id = 1;
+  string tenant_id = 2;
+  int32 version = 3; // 0 = latest
+}
+
+message ListRequest {
+  string tenant_id = 1;
+}
+
+message ListResponse {
+  repeated CapabilitySummary capabilities = 1;
+}
+
+message CapabilitySummary {
+  string capability_id = 1;
+  int32 latest_version = 2;
+  string name = 3;
+  int32 risk_level = 4;
+}
+
+message VersionHistoryRequest {
+  string capability_id = 1;
+}
+
+message VersionHistoryResponse {
+  repeated CapabilityVersionEntry versions = 1;
+}
+
+message CapabilityVersionEntry {
+  int32 version = 1;
+  Compatibility compatibility = 2;
+  google.protobuf.Timestamp compiled_at = 3;
+  string discovery_run_id = 4;
+}
+
+// Wire shape mirrors shared/schemas.py CapabilityArtifact; kept as opaque
+// JSON here too, since the registry's own store is the schema's source of
+// truth and proto would otherwise duplicate every field definition.
+message Capability {
+  string capability_id = 1;
+  int32 version = 2;
+  Compatibility compatibility = 3;
+  string tenant_scope = 4;
+  bytes artifact_json = 5;
+}

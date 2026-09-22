@@ -1,0 +1,49 @@
+[
+  {
+    "event_id": "evt_8c7d57793b8f4f84",
+    "topic": "escalation.events",
+    "offset": 0,
+    "correlation_id": "corr_16c3e6508111",
+    "event_type": "InterventionRequested",
+    "occurred_at_ms": 1790109520675,
+    "payload": {
+      "saga_id": "saga_576361b5d10b",
+      "run_id": "replay_a77b503e8e80",
+      "dead_letter_event_id": "dlq_400f9f008749432e",
+      "failed_step_id": "step_3",
+      "reason": "hard failure at step step_3",
+      "context": {
+        "expected": "text_present=1001",
+        "observed": "url=http://localhost:4000/default/members/1002 title=Member Detail - Branch Teller System",
+        "screenshot_path": "services/replay_runtime/screenshots/replay_a77b503e8e80.png"
+      }
+    }
+  },
+  {
+    "event_id": "evt_5a15e09d85f7498b",
+    "topic": "escalation.events",
+    "offset": 1,
+    "correlation_id": "corr_16c3e6508111",
+    "event_type": "ControlClaimed",
+    "occurred_at_ms": 1790109550280,
+    "payload": {
+      "saga_id": "saga_576361b5d10b",
+      "run_id": "replay_a77b503e8e80",
+      "operator_id": "teller_console_operator"
+    }
+  },
+  {
+    "event_id": "evt_a01b294cace74ffb",
+    "topic": "escalation.events",
+    "offset": 2,
+    "correlation_id": "corr_16c3e6508111",
+    "event_type": "ControlReturned",
+    "occurred_at_ms": 1790109550303,
+    "payload": {
+      "saga_id": "saga_576361b5d10b",
+      "run_id": "replay_a77b503e8e80",
+      "operator_id": "teller_console_operator",
+      "resume_agent": false
+    }
+  }
+]

@@ -1,0 +1,104 @@
+[
+  {
+    "event_id": "evt_5e22934928cc4b89",
+    "topic": "replay.events",
+    "offset": 0,
+    "correlation_id": "corr_fa72e01e9f53",
+    "event_type": "ReplayRequested",
+    "occurred_at_ms": 1790109511683,
+    "payload": {
+      "run_id": "replay_9aa426bfffc5",
+      "capability_id": "member_balance_lookup",
+      "tenant_id": "default",
+      "input_params": {
+        "entry_url": "http://localhost:4000/default/members",
+        "member_id": "1001"
+      }
+    }
+  },
+  {
+    "event_id": "evt_79c1a47af3f046cd",
+    "topic": "replay.events",
+    "offset": 1,
+    "correlation_id": "corr_fa72e01e9f53",
+    "event_type": "ReplayStepExecuted",
+    "occurred_at_ms": 1790109512521,
+    "payload": {
+      "run_id": "replay_9aa426bfffc5",
+      "step_id": "step_0",
+      "outcome": "success",
+      "detail": ""
+    }
+  },
+  {
+    "event_id": "evt_2b176594204f4db8",
+    "topic": "replay.events",
+    "offset": 2,
+    "correlation_id": "corr_fa72e01e9f53",
+    "event_type": "ReplayStepExecuted",
+    "occurred_at_ms": 1790109512521,
+    "payload": {
+      "run_id": "replay_9aa426bfffc5",
+      "step_id": "step_1",
+      "outcome": "success",
+      "detail": ""
+    }
+  },
+  {
+    "event_id": "evt_864a293ecdc34577",
+    "topic": "replay.events",
+    "offset": 3,
+    "correlation_id": "corr_fa72e01e9f53",
+    "event_type": "ReplayStepExecuted",
+    "occurred_at_ms": 1790109512521,
+    "payload": {
+      "run_id": "replay_9aa426bfffc5",
+      "step_id": "step_2",
+      "outcome": "success",
+      "detail": ""
+    }
+  },
+  {
+    "event_id": "evt_56924bf28de14f22",
+    "topic": "replay.events",
+    "offset": 4,
+    "correlation_id": "corr_fa72e01e9f53",
+    "event_type": "ReplayStepExecuted",
+    "occurred_at_ms": 1790109512522,
+    "payload": {
+      "run_id": "replay_9aa426bfffc5",
+      "step_id": "step_3",
+      "outcome": "success",
+      "detail": ""
+    }
+  },
+  {
+    "event_id": "evt_e51595ebfa1d44ee",
+    "topic": "replay.events",
+    "offset": 5,
+    "correlation_id": "corr_fa72e01e9f53",
+    "event_type": "ReplayStepExecuted",
+    "occurred_at_ms": 1790109512522,
+    "payload": {
+      "run_id": "replay_9aa426bfffc5",
+      "step_id": "step_4",
+      "outcome": "success",
+      "detail": ""
+    }
+  },
+  {
+    "event_id": "evt_fb7669ea99814c80",
+    "topic": "replay.events",
+    "offset": 6,
+    "correlation_id": "corr_fa72e01e9f53",
+    "event_type": "ReplaySucceeded",
+    "occurred_at_ms": 1790109512523,
+    "payload": {
+      "run_id": "replay_9aa426bfffc5",
+      "outputs": {
+        "current_balance": "4,823.11"
+      },
+      "retry_count": 0
+    }
+  }
+]

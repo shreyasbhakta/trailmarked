@@ -1,0 +1,23 @@
+<html>
+<head><title>Sub-Account Confirmation - Branch Teller System</title></head>
+<body bgcolor="#ECE9D8">
+<table width="100%" cellpadding="4" cellspacing="0" border="0" bgcolor="#003366">
+<tr><td><font color="white" size="4"><b>Branch Teller System</b> &mdash; Confirmation</font></td></tr>
+</table>
+<br>
+<table cellpadding="6" cellspacing="0" border="1" bgcolor="#DDFFDD">
+<tr><td>
+<b>Sub-account opened successfully.</b><br><br>
+<table cellpadding="2" cellspacing="0" border="0">
+<tr><td>Sub-Account ID:</td><td><b>{{ sub_account.sub_account_id }}</b></td></tr>
+<tr><td>Member ID:</td><td>{{ sub_account.member_id }}</td></tr>
+<tr><td>Account Type:</td><td>{{ sub_account.account_type }}</td></tr>
+<tr><td>Nickname:</td><td>{{ sub_account.nickname }}</td></tr>
+<tr><td>Opening Deposit:</td><td>${{ "%.2f"|format(sub_account.opening_deposit_cents / 100) }}</td></tr>
+</table>
+</td></tr>
+</table>
+<br>
+<a href="/default/members/{{ sub_account.member_id }}">Back to Member Detail</a>
+</body>
+</html>

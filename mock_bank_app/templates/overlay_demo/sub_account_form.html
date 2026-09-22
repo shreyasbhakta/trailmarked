@@ -1,0 +1,33 @@
+<html>
+<head><title>New Sub-Account :: Credit Union Teller Console</title></head>
+<body style="background:#1c2b1c; font-family: monospace; color:#d8e8d8;">
+<div style="background:#0f1a0f; padding:10px;"><strong>Credit Union Teller Console</strong> :: New Sub-Account</div>
+<br>
+{% if errors %}
+<div style="border:1px solid #ff8888; background:#2b1c1c; padding:10px; width:400px;">
+  <b style="color:#ff8888;">Fix these before continuing:</b>
+  <ul>{% for e in errors %}<li>{{ e }}</li>{% endfor %}</ul>
+</div>
+<br>
+{% endif %}
+<form method="post" action="/overlay_demo/members/{{ member_id }}/sub-accounts" class="sub-account-form" style="border:1px solid #4a6a4a; padding:12px; width:400px;">
+  <div>Member No.: {{ member_id }}</div>
+  <div>
+    <label for="nickname-field">Sub-Account Nickname</label>
+    <input type="text" id="nickname-field" name="nickname" value="{{ form.nickname or '' }}">
+  </div>
+  <div>
+    <label for="type-field">Type</label>
+    <select id="type-field" name="account_type">
+      <option value="savings" {% if form.account_type == 'savings' %}selected{% endif %}>Savings</option>
+      <option value="checking" {% if form.account_type == 'checking' %}selected{% endif %}>Checking</option>
+    </select>
+  </div>
+  <div>
+    <label for="deposit-field">Opening Deposit (USD)</label>
+    <input type="text" id="deposit-field" name="opening_deposit" value="{{ form.opening_deposit or '' }}">
+  </div>
+  <button type="submit">Confirm</button>
+</form>
+</body>
+</html>

@@ -1,0 +1,17 @@
+<html>
+<head><title>Member Lookup :: Credit Union Teller Console</title></head>
+<body style="background:#1c2b1c; font-family: monospace; color:#d8e8d8;">
+<div style="background:#0f1a0f; padding:10px;"><strong>Credit Union Teller Console</strong> :: Member Lookup</div>
+<br>
+<div class="lookup-panel" style="border:1px solid #4a6a4a; padding:12px; width:340px;">
+  <form method="get" action="/overlay_demo/members/lookup">
+    <label for="mid-field">Acct/Member No.</label>
+    <input type="text" id="mid-field" name="member_id">
+    <button type="submit">Find Member</button>
+  </form>
+</div>
+{% if error %}
+<p style="color:#ff8888;"><b>{{ error }}</b></p>
+{% endif %}
+</body>
+</html>

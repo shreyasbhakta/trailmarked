@@ -1,0 +1,27 @@
+<html>
+<head><title>Member Lookup - Branch Teller System</title></head>
+<body bgcolor="#ECE9D8">
+<table width="100%" cellpadding="4" cellspacing="0" border="0" bgcolor="#003366">
+<tr><td><font color="white" size="4"><b>Branch Teller System</b> &mdash; Member Lookup</font></td></tr>
+</table>
+<br>
+<table cellpadding="6" cellspacing="0" border="1">
+<tr>
+  <td>
+    <form method="get" action="/default/members/lookup">
+      <table cellpadding="4" cellspacing="0" border="0">
+        <tr>
+          <td>Member ID:</td>
+          <td><input type="text" name="member_id" size="12"></td>
+          <td><input type="submit" value="Search"></td>
+        </tr>
+      </table>
+    </form>
+  </td>
+</tr>
+</table>
+{% if error %}
+<p><font color="red"><b>{{ error }}</b></font></p>
+{% endif %}
+</body>
+</html>

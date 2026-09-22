@@ -1,0 +1,16 @@
+{
+  "ack": {
+    "run_id": "replay_9aa426bfffc5",
+    "deduplicated": false
+  },
+  "status": {
+    "run_id": "replay_9aa426bfffc5",
+    "outcome": "BUSINESS_OUTCOME",
+    "outputs": {
+      "current_balance": "4,823.11"
+    },
+    "retry_count": 0,
+    "failed_step_id": "",
+    "dead_letter_event_id": ""
+  }
+}

@@ -1,0 +1,19 @@
+<html>
+<head><title>Confirmation :: Credit Union Teller Console</title></head>
+<body style="background:#1c2b1c; font-family: monospace; color:#d8e8d8;">
+<div style="background:#0f1a0f; padding:10px;"><strong>Credit Union Teller Console</strong> :: Confirmation</div>
+<br>
+<div style="border:1px solid #4ac04a; background:#1c2b1c; padding:12px; width:400px;" class="confirmation-panel">
+  <b>Sub-account created.</b>
+  <dl>
+    <dt>Sub-Account No.</dt><dd id="new-sub-account-id">{{ sub_account.sub_account_id }}</dd>
+    <dt>Member No.</dt><dd>{{ sub_account.member_id }}</dd>
+    <dt>Type</dt><dd>{{ sub_account.account_type }}</dd>
+    <dt>Nickname</dt><dd>{{ sub_account.nickname }}</dd>
+    <dt>Opening Deposit</dt><dd>${{ "%.2f"|format(sub_account.opening_deposit_cents / 100) }}</dd>
+  </dl>
+</div>
+<br>
+<a href="/overlay_demo/members/{{ sub_account.member_id }}">Back to Member Detail</a>
+</body>
+</html>

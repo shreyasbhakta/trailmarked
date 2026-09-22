@@ -1,0 +1,35 @@
+<html>
+<head><title>Open Sub-Account - Branch Teller System</title></head>
+<body bgcolor="#ECE9D8">
+<table width="100%" cellpadding="4" cellspacing="0" border="0" bgcolor="#003366">
+<tr><td><font color="white" size="4"><b>Branch Teller System</b> &mdash; Open Sub-Account</font></td></tr>
+</table>
+<br>
+{% if errors %}
+<table cellpadding="4" cellspacing="0" border="1" bgcolor="#FFDDDD">
+<tr><td><font color="red"><b>Please correct the following:</b>
+<ul>{% for e in errors %}<li>{{ e }}</li>{% endfor %}</ul>
+</font></td></tr>
+</table>
+<br>
+{% endif %}
+<table cellpadding="6" cellspacing="0" border="1">
+<tr><td>
+<form method="post" action="/default/members/{{ member_id }}/sub-accounts">
+<table cellpadding="4" cellspacing="0" border="0">
+<tr><td>Member ID:</td><td>{{ member_id }}</td></tr>
+<tr><td>Account Type:</td><td>
+  <select name="account_type">
+    <option value="savings" {% if form.account_type == 'savings' %}selected{% endif %}>Savings</option>
+    <option value="checking" {% if form.account_type == 'checking' %}selected{% endif %}>Checking</option>
+  </select>
+</td></tr>
+<tr><td>Nickname:</td><td><input type="text" name="nickname" value="{{ form.nickname or '' }}" size="20"></td></tr>
+<tr><td>Opening Deposit ($):</td><td><input type="text" name="opening_deposit" value="{{ form.opening_deposit or '' }}" size="10"></td></tr>
+<tr><td colspan="2" align="right"><input type="submit" value="Submit"></td></tr>
+</table>
+</form>
+</td></tr>
+</table>
+</body>
+</html>

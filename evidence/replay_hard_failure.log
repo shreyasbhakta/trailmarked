@@ -1,0 +1,14 @@
+{
+  "ack": {
+    "run_id": "replay_a77b503e8e80",
+    "deduplicated": false
+  },
+  "status": {
+    "run_id": "replay_a77b503e8e80",
+    "outcome": "HARD_FAILURE",
+    "outputs": {},
+    "retry_count": 0,
+    "failed_step_id": "step_3",
+    "dead_letter_event_id": "dlq_400f9f008749432e"
+  }
+}

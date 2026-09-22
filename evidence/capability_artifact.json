@@ -1,0 +1,120 @@
+{
+  "capability_id": "member_balance_lookup",
+  "version": 1,
+  "compatibility": "BACKWARD",
+  "tenant_scope": "*",
+  "input_params": [
+    {
+      "name": "entry_url",
+      "type": "string",
+      "required": true,
+      "description": ""
+    },
+    {
+      "name": "member_id",
+      "type": "string",
+      "required": true,
+      "description": ""
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step_0",
+      "action_type": "navigate",
+      "strategy_chain": [],
+      "risk_tag": "safe",
+      "param_bindings": {
+        "url": "entry_url"
+      }
+    },
+    {
+      "step_id": "step_1",
+      "action_type": "fill",
+      "strategy_chain": [
+        {
+          "kind": "role",
+          "value": "textbox"
+        },
+        {
+          "kind": "label",
+          "value": "Member ID:"
+        }
+      ],
+      "risk_tag": "safe",
+      "param_bindings": {
+        "value": "member_id"
+      }
+    },
+    {
+      "step_id": "step_2",
+      "action_type": "click",
+      "strategy_chain": [
+        {
+          "kind": "role",
+          "value": "button[name=\"Search\"]"
+        }
+      ],
+      "risk_tag": "safe",
+      "param_bindings": {}
+    },
+    {
+      "step_id": "step_3",
+      "action_type": "assert",
+      "strategy_chain": [
+        {
+          "kind": "text",
+          "value": "Member ID:"
+        },
+        {
+          "kind": "text",
+          "value": "1001"
+        }
+      ],
+      "risk_tag": "safe",
+      "param_bindings": {
+        "expected": "member_id"
+      }
+    },
+    {
+      "step_id": "step_4",
+      "action_type": "extract",
+      "strategy_chain": [
+        {
+          "kind": "text",
+          "value": "4,823.11"
+        },
+        {
+          "kind": "css",
+          "value": "table >> text=4,823.11"
+        }
+      ],
+      "risk_tag": "safe",
+      "param_bindings": {}
+    }
+  ],
+  "checkpoints": [
+    {
+      "checkpoint_id": "chk_3",
+      "step_id": "step_3",
+      "assertion": "text_present",
+      "expected": "1001"
+    }
+  ],
+  "outputs": [
+    {
+      "name": "current_balance",
+      "type": "string",
+      "extraction_source": "step_4"
+    }
+  ],
+  "success_condition": "Member 1001's current balance was located and extracted from the Member Detail page",
+  "provenance": {
+    "discovery_run_id": "run_553fbde5df52",
+    "compiled_at": "2026-09-22T20:38:06.036847Z"
+  },
+  "risk_summary": {
+    "highest_risk_tag": "safe",
+    "risky_step_count": 0,
+    "requires_preapproval": false
+  }
+}

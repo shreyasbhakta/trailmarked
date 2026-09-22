@@ -1,0 +1,22 @@
+<html>
+<head><title>Member Detail :: Credit Union Teller Console</title></head>
+<body style="background:#1c2b1c; font-family: monospace; color:#d8e8d8;">
+<div style="background:#0f1a0f; padding:10px;"><strong>Credit Union Teller Console</strong> :: Member Detail</div>
+<br>
+<dl class="member-record" style="border:1px solid #4a6a4a; padding:12px; width:400px;">
+  <dt>Member No.</dt><dd>{{ member.member_id }}</dd>
+  <dt>Holder Name</dt><dd>{{ member.name }}</dd>
+  <dt>Balance</dt>
+  <dd>
+    <div class="balance-panel">
+      <span class="currency-symbol">USD</span>
+      <span class="figure" id="acct-balance">{{ balance_display }}</span>
+    </div>
+  </dd>
+</dl>
+<br>
+<a href="/overlay_demo/members/{{ member.member_id }}/sub-accounts/new">+ New Sub-Account</a>
+&nbsp;|&nbsp;
+<a href="/overlay_demo/members">New Lookup</a>
+</body>
+</html>

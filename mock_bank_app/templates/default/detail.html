@@ -1,0 +1,31 @@
+<html>
+<head><title>Member Detail - Branch Teller System</title></head>
+<body bgcolor="#ECE9D8">
+<table width="100%" cellpadding="4" cellspacing="0" border="0" bgcolor="#003366">
+<tr><td><font color="white" size="4"><b>Branch Teller System</b> &mdash; Member Detail</font></td></tr>
+</table>
+<br>
+<table cellpadding="6" cellspacing="0" border="1">
+<tr><td>Member ID:</td><td>{{ member.member_id }}</td></tr>
+<tr><td>Name:</td><td>{{ member.name }}</td></tr>
+<tr>
+  <td>Current Balance:</td>
+  <td>
+    <table cellpadding="0" cellspacing="0" border="0">
+      <tr>
+        <td>
+          <table cellpadding="2" cellspacing="0" border="0">
+            <tr><td><b>$</b></td><td><span id="balance-amount">{{ balance_display }}</span></td></tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<br>
+<a href="/default/members/{{ member.member_id }}/sub-accounts/new">Open Sub-Account</a>
+&nbsp;|&nbsp;
+<a href="/default/members">New Search</a>
+</body>
+</html>

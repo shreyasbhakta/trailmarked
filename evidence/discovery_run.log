@@ -1,0 +1,20 @@
+2026-09-22 16:37:55,316 httpx2 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 16:37:57,799 httpx2 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 16:38:00,459 httpx2 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 16:38:02,941 httpx2 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-09-22 16:38:05,971 httpx2 INFO HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+{
+  "run_id": "run_553fbde5df52",
+  "correlation_id": "corr_4d31a5f16499471f942e6247551f4edc",
+  "status": "RunSucceeded",
+  "outputs": {
+    "member_id": "1001",
+    "name": "Alice Nguyen (Default Branch)",
+    "current_balance": "$4,823.11"
+  }
+}
+{
+  "capability_id": "member_balance_lookup",
+  "version": 1,
+  "compatibility": "BACKWARD"
+}

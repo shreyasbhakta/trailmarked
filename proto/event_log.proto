@@ -1,0 +1,94 @@
+syntax = "proto3";
+
+package trailmarked.eventlog;
+
+import "google/protobuf/timestamp.proto";
+
+// EventLog is the single write side of the platform. Every domain event
+// (ObservationCaptured, ActionDecided, ActionExecuted, StepSucceeded,
+// RunSucceeded/Failed, ReplayRequested, InterventionRequested, ...) is
+// appended here through the outbox dispatcher, never written directly by
+// a producing service's own transaction.
+service EventLog {
+  // Append is only ever called by an outbox dispatcher, never directly by
+  // business logic, so a crash between the local write and the publish
+  // can't silently drop an event.
+  rpc Append(AppendRequest) returns (AppendResponse);
+
+  // Fetch lets a consumer group pull a bounded batch starting at its last
+  // committed offset for a topic.
+  rpc Fetch(FetchRequest) returns (FetchResponse);
+
+  rpc CommitOffset(CommitOffsetRequest) returns (CommitOffsetResponse);
+
+  // StreamTopic is a server-streaming tail of a topic from a given offset,
+  // used by the dashboard's SSE bridge and by long-lived consumers
+  // (registry projector, replay runtime, escalation saga).
+  rpc StreamTopic(StreamTopicRequest) returns (stream Event);
+
+  // Publishes a poison-pilled event to a topic's dead-letter counterpart
+  // with the failure context attached.
+  rpc DeadLetter(DeadLetterRequest) returns (DeadLetterResponse);
+}
+
+message Event {
+  string event_id = 1;
+  string topic = 2;
+  int64 offset = 3;
+  string correlation_id = 4;
+  string event_type = 5;
+  google.protobuf.Timestamp occurred_at = 6;
+  // JSON-encoded payload. Kept opaque at the transport layer so each
+  // producing service owns its own event schema (versioned in shared/schemas.py)
+  // without the log needing a proto message per event type.
+  bytes payload_json = 7;
+}
+
+message AppendRequest {
+  string topic = 1;
+  string correlation_id = 2;
+  string event_type = 3;
+  bytes payload_json = 4;
+  // Producer-supplied dedupe key for outbox at-least-once delivery.
+  string producer_dedupe_key = 5;
+}
+
+message AppendResponse {
+  string event_id = 1;
+  int64 offset = 2;
+}
+
+message FetchRequest {
+  string topic = 1;
+  string consumer_group = 2;
+  int32 max_events = 3;
+}
+
+message FetchResponse {
+  repeated Event events = 1;
+}
+
+message CommitOffsetRequest {
+  string topic = 1;
+  string consumer_group = 2;
+  int64 offset = 3;
+}
+
+message CommitOffsetResponse {}
+
+message StreamTopicRequest {
+  string topic = 1;
+  int64 from_offset = 2;
+}
+
+message DeadLetterRequest {
+  string source_topic = 1;
+  string correlation_id = 2;
+  string failure_reason = 3;
+  bytes original_payload_json = 4;
+  bytes failure_context_json = 5;
+}
+
+message DeadLetterResponse {
+  string event_id = 1;
+}

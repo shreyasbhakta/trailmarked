@@ -1,0 +1,93 @@
+[
+  {
+    "event_id": "evt_97ee98177bc54d18",
+    "topic": "replay.events",
+    "offset": 7,
+    "correlation_id": "corr_16c3e6508111",
+    "event_type": "ReplayRequested",
+    "occurred_at_ms": 1790109520222,
+    "payload": {
+      "run_id": "replay_a77b503e8e80",
+      "capability_id": "member_balance_lookup",
+      "tenant_id": "default",
+      "input_params": {
+        "entry_url": "http://localhost:4000/default/members",
+        "member_id": "1002"
+      }
+    }
+  },
+  {
+    "event_id": "evt_858eef3cd8ce42bf",
+    "topic": "replay.events",
+    "offset": 8,
+    "correlation_id": "corr_16c3e6508111",
+    "event_type": "ReplayStepExecuted",
+    "occurred_at_ms": 1790109520676,
+    "payload": {
+      "run_id": "replay_a77b503e8e80",
+      "step_id": "step_0",
+      "outcome": "success",
+      "detail": ""
+    }
+  },
+  {
+    "event_id": "evt_81b7e8070d9e4dc4",
+    "topic": "replay.events",
+    "offset": 9,
+    "correlation_id": "corr_16c3e6508111",
+    "event_type": "ReplayStepExecuted",
+    "occurred_at_ms": 1790109520676,
+    "payload": {
+      "run_id": "replay_a77b503e8e80",
+      "step_id": "step_1",
+      "outcome": "success",
+      "detail": ""
+    }
+  },
+  {
+    "event_id": "evt_ac0bff03833e4a8a",
+    "topic": "replay.events",
+    "offset": 10,
+    "correlation_id": "corr_16c3e6508111",
+    "event_type": "ReplayStepExecuted",
+    "occurred_at_ms": 1790109520677,
+    "payload": {
+      "run_id": "replay_a77b503e8e80",
+      "step_id": "step_2",
+      "outcome": "success",
+      "detail": ""
+    }
+  },
+  {
+    "event_id": "evt_9728f2d89fbe4ec7",
+    "topic": "replay.events",
+    "offset": 11,
+    "correlation_id": "corr_16c3e6508111",
+    "event_type": "ReplayStepExecuted",
+    "occurred_at_ms": 1790109520677,
+    "payload": {
+      "run_id": "replay_a77b503e8e80",
+      "step_id": "step_3",
+      "outcome": "hard_failure",
+      "detail": "checkpoint failed at step step_3"
+    }
+  },
+  {
+    "event_id": "evt_aa89b091b6524082",
+    "topic": "replay.events",
+    "offset": 12,
+    "correlation_id": "corr_16c3e6508111",
+    "event_type": "ReplayHardFailure",
+    "occurred_at_ms": 1790109520678,
+    "payload": {
+      "run_id": "replay_a77b503e8e80",
+      "failed_step_id": "step_3",
+      "dead_letter_event_id": "dlq_400f9f008749432e",
+      "context": {
+        "expected": "text_present=1001",
+        "observed": "url=http://localhost:4000/default/members/1002 title=Member Detail - Branch Teller System",
+        "screenshot_path": "services/replay_runtime/screenshots/replay_a77b503e8e80.png"
+      }
+    }
+  }
+]

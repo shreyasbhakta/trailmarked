@@ -1,0 +1,92 @@
+syntax = "proto3";
+
+package trailmarked.escalation;
+
+// EscalationSaga is an explicit state machine for handing browser control
+// between the agent and a human operator:
+//   AGENT_CONTROLLED -> INTERVENTION_REQUESTED -> HUMAN_CONTROLLED
+//   -> CONTROL_RETURNED -> (resume | terminate)
+// A dead-lettered hard failure from replay_runtime is what drives the first
+// transition; a human claiming the live session drives the second.
+service EscalationSaga {
+  rpc RequestIntervention(InterventionRequest) returns (InterventionAck);
+
+  rpc ClaimSession(ClaimRequest) returns (ClaimAck);
+
+  rpc RecordHumanAction(HumanActionRequest) returns (Ack);
+
+  rpc ReleaseControl(ReleaseRequest) returns (ReleaseAck);
+
+  rpc GetSagaState(SagaStateRequest) returns (SagaState);
+
+  rpc ListSagas(ListSagasRequest) returns (ListSagasResponse);
+}
+
+message ListSagasRequest {}
+
+message ListSagasResponse {
+  repeated SagaState sagas = 1;
+}
+
+enum SagaStatus {
+  AGENT_CONTROLLED = 0;
+  INTERVENTION_REQUESTED = 1;
+  HUMAN_CONTROLLED = 2;
+  CONTROL_RETURNED = 3;
+  RESUMED = 4;
+  TERMINATED = 5;
+}
+
+message InterventionRequest {
+  string run_id = 1;
+  string correlation_id = 2;
+  string dead_letter_event_id = 3;
+  string failed_step_id = 4;
+  string reason = 5;
+  bytes context_json = 6; // expected vs observed, full step context
+}
+
+message InterventionAck {
+  string saga_id = 1;
+  SagaStatus status = 2;
+}
+
+message ClaimRequest {
+  string saga_id = 1;
+  string operator_id = 2;
+}
+
+message ClaimAck {
+  string saga_id = 1;
+  string session_handle = 2; // reference to the SAME live browser session
+  SagaStatus status = 3;
+}
+
+message HumanActionRequest {
+  string saga_id = 1;
+  string operator_id = 2;
+  bytes action_json = 3;
+}
+
+message Ack {}
+
+message ReleaseRequest {
+  string saga_id = 1;
+  string operator_id = 2;
+  bool resume_agent = 3; // false => terminate the run instead
+}
+
+message ReleaseAck {
+  SagaStatus status = 1;
+}
+
+message SagaStateRequest {
+  string saga_id = 1;
+}
+
+message SagaState {
+  string saga_id = 1;
+  string run_id = 2;
+  SagaStatus status = 3;
+  string claimed_by_operator_id = 4;
+}

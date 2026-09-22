@@ -1,0 +1,15 @@
+.venv/
+__pycache__/
+*.pyc
+*.egg-info/
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+
+node_modules/
+dashboard/dist/
+scripts/logs/
+services/replay_runtime/screenshots/
+
+.DS_Store

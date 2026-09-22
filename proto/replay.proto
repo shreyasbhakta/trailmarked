@@ -1,0 +1,83 @@
+syntax = "proto3";
+
+package trailmarked.replay;
+
+// ReplayRuntime executes a compiled capability deterministically. No LLM
+// call ever happens on this path — that is the entire point of trailmarking
+// a run. Idempotency-key checks and the circuit breaker live here.
+service ReplayRuntime {
+  rpc SubmitReplay(ReplayRequest) returns (ReplayAck);
+
+  rpc GetReplayStatus(ReplayStatusRequest) returns (ReplayStatus);
+
+  rpc GetCircuitBreakerState(CircuitBreakerRequest) returns (CircuitBreakerState);
+
+  // A hard-failed run's browser session is kept alive (not closed) pending
+  // an escalation decision. These two RPCs let the escalation saga act on
+  // that SAME session from its own process, rather than a fresh one.
+  rpc ActOnLiveSession(ActOnLiveSessionRequest) returns (Ack);
+  rpc ReleaseLiveSession(ReleaseLiveSessionRequest) returns (Ack);
+}
+
+message Ack {}
+
+message ActOnLiveSessionRequest {
+  string run_id = 1;
+  string action_type = 2; // click | fill | select
+  string locator = 3;
+  string value = 4;
+}
+
+message ReleaseLiveSessionRequest {
+  string run_id = 1;
+  bool terminate = 2; // true: close the browser. false: leave open (resume is a documented cut).
+}
+
+message ReplayRequest {
+  string capability_id = 1;
+  int32 version = 2;
+  string tenant_id = 3;
+  string idempotency_key = 4;
+  bytes input_params_json = 5;
+  string correlation_id = 6;
+}
+
+message ReplayAck {
+  string run_id = 1;
+  bool deduplicated = 2; // true if idempotency_key matched a prior run
+}
+
+message ReplayStatusRequest {
+  string run_id = 1;
+}
+
+enum Outcome {
+  PENDING = 0;
+  BUSINESS_OUTCOME = 1;
+  RECOVERABLE = 2;
+  HARD_FAILURE = 3;
+}
+
+message ReplayStatus {
+  string run_id = 1;
+  Outcome outcome = 2;
+  bytes outputs_json = 3;
+  int32 retry_count = 4;
+  string failed_step_id = 5;
+  string dead_letter_event_id = 6;
+}
+
+message CircuitBreakerRequest {
+  string target_key = 1; // (tenant_id, capability_id) driver scope
+}
+
+message CircuitBreakerState {
+  enum State {
+    CLOSED = 0;
+    OPEN = 1;
+    HALF_OPEN = 2;
+  }
+  State state = 1;
+  int32 consecutive_failures = 2;
+  int64 cooldown_until_epoch_ms = 3;
+}

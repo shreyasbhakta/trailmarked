@@ -1,0 +1,381 @@
+[
+  {
+    "event_id": "evt_228e9258917443d0",
+    "topic": "discovery.events",
+    "offset": 0,
+    "correlation_id": "corr_4d31a5f16499471f942e6247551f4edc",
+    "event_type": "ActionDecided",
+    "occurred_at_ms": 1790109473165,
+    "payload": {
+      "step_index": 0,
+      "action_type": "navigate",
+      "target_description": "open application entry point",
+      "locator_candidates": [],
+      "params": {
+        "url": "http://localhost:4000/default/members"
+      },
+      "risk_tag": "safe",
+      "rationale": "start of run",
+      "param_bindings": {
+        "url": "entry_url"
+      },
+      "run_id": "run_553fbde5df52"
+    }
+  },
+  {
+    "event_id": "evt_99bc4bafec3c4c50",
+    "topic": "discovery.events",
+    "offset": 1,
+    "correlation_id": "corr_4d31a5f16499471f942e6247551f4edc",
+    "event_type": "ActionExecuted",
+    "occurred_at_ms": 1790109473371,
+    "payload": {
+      "step_index": 0,
+      "locator_used": null,
+      "outcome": "success",
+      "error_message": null,
+      "run_id": "run_553fbde5df52"
+    }
+  },
+  {
+    "event_id": "evt_ba8d7913d2c64209",
+    "topic": "discovery.events",
+    "offset": 2,
+    "correlation_id": "corr_4d31a5f16499471f942e6247551f4edc",
+    "event_type": "StepSucceeded",
+    "occurred_at_ms": 1790109473372,
+    "payload": {
+      "step_index": 0,
+      "checkpoint_assertions": [],
+      "run_id": "run_553fbde5df52"
+    }
+  },
+  {
+    "event_id": "evt_f433bb1056fb4449",
+    "topic": "discovery.events",
+    "offset": 3,
+    "correlation_id": "corr_4d31a5f16499471f942e6247551f4edc",
+    "event_type": "ObservationCaptured",
+    "occurred_at_ms": 1790109473373,
+    "payload": {
+      "step_index": 1,
+      "a11y_snapshot": "- table:\n  - rowgroup:\n    - row \"Branch Teller System \u2014 Member Lookup\":\n      - cell \"Branch Teller System \u2014 Member Lookup\"\n- table:\n  - rowgroup:\n    - 'row \"Member ID: Search\"':\n      - 'cell \"Member ID: Search\"':\n        - table:\n          - rowgroup:\n            - 'row \"Member ID: Search\"':\n              - cell \"Member ID:\"\n              - cell:\n                - textbox\n              - cell \"Search\":\n                - button \"Search\"",
+      "url": "http://localhost:4000/default/members",
+      "run_id": "run_553fbde5df52"
+    }
+  },
+  {
+    "event_id": "evt_e08af25a3592475e",
+    "topic": "discovery.events",
+    "offset": 4,
+    "correlation_id": "corr_4d31a5f16499471f942e6247551f4edc",
+    "event_type": "ActionDecided",
+    "occurred_at_ms": 1790109475421,
+    "payload": {
+      "step_index": 1,
+      "action_type": "fill",
+      "target_description": "Member ID textbox",
+      "locator_candidates": [
+        "label=Member ID:",
+        "role=textbox"
+      ],
+      "params": {
+        "value": "1001"
+      },
+      "risk_tag": "safe",
+      "rationale": "Enter the member ID to search for before clicking Search.",
+      "param_bindings": {
+        "value": "member_id"
+      },
+      "run_id": "run_553fbde5df52"
+    }
+  },
+  {
+    "event_id": "evt_0e4037cf6dc74fd9",
+    "topic": "discovery.events",
+    "offset": 5,
+    "correlation_id": "corr_4d31a5f16499471f942e6247551f4edc",
+    "event_type": "ActionExecuted",
+    "occurred_at_ms": 1790109475629,
+    "payload": {
+      "step_index": 1,
+      "locator_used": "role=textbox",
+      "outcome": "success",
+      "error_message": null,
+      "run_id": "run_553fbde5df52"
+    }
+  },
+  {
+    "event_id": "evt_d2da267b970447af",
+    "topic": "discovery.events",
+    "offset": 6,
+    "correlation_id": "corr_4d31a5f16499471f942e6247551f4edc",
+    "event_type": "StepSucceeded",
+    "occurred_at_ms": 1790109475630,
+    "payload": {
+      "step_index": 1,
+      "checkpoint_assertions": [],
+      "run_id": "run_553fbde5df52"
+    }
+  },
+  {
+    "event_id": "evt_7e7539557bc04db0",
+    "topic": "discovery.events",
+    "offset": 7,
+    "correlation_id": "corr_4d31a5f16499471f942e6247551f4edc",
+    "event_type": "ObservationCaptured",
+    "occurred_at_ms": 1790109475631,
+    "payload": {
+      "step_index": 2,
+      "a11y_snapshot": "- table:\n  - rowgroup:\n    - row \"Branch Teller System \u2014 Member Lookup\":\n      - cell \"Branch Teller System \u2014 Member Lookup\"\n- table:\n  - rowgroup:\n    - 'row \"Member ID: 1001 Search\"':\n      - 'cell \"Member ID: 1001 Search\"':\n        - table:\n          - rowgroup:\n            - 'row \"Member ID: 1001 Search\"':\n              - cell \"Member ID:\"\n              - cell \"1001\":\n                - textbox: \"1001\"\n              - cell \"Search\":\n                - button \"Search\"",
+      "url": "http://localhost:4000/default/members",
+      "run_id": "run_553fbde5df52"
+    }
+  },
+  {
+    "event_id": "evt_fc6e277eb6bb4842",
+    "topic": "discovery.events",
+    "offset": 8,
+    "correlation_id": "corr_4d31a5f16499471f942e6247551f4edc",
+    "event_type": "ActionDecided",
+    "occurred_at_ms": 1790109477877,
+    "payload": {
+      "step_index": 2,
+      "action_type": "click",
+      "target_description": "Search button to look up member 1001",
+      "locator_candidates": [
+        "role=button[name=\"Search\"]"
+      ],
+      "params": {},
+      "risk_tag": "safe",
+      "rationale": "Submit the search to retrieve member 1001's details.",
+      "param_bindings": {},
+      "run_id": "run_553fbde5df52"
+    }
+  },
+  {
+    "event_id": "evt_b906d61d2ce845af",
+    "topic": "discovery.events",
+    "offset": 9,
+    "correlation_id": "corr_4d31a5f16499471f942e6247551f4edc",
+    "event_type": "ActionExecuted",
+    "occurred_at_ms": 1790109477879,
+    "payload": {
+      "step_index": 2,
+      "locator_used": "role=button[name=\"Search\"]",
+      "outcome": "success",
+      "error_message": null,
+      "run_id": "run_553fbde5df52"
+    }
+  },
+  {
+    "event_id": "evt_ad8c4b8e745d4bf2",
+    "topic": "discovery.events",
+    "offset": 10,
+    "correlation_id": "corr_4d31a5f16499471f942e6247551f4edc",
+    "event_type": "StepSucceeded",
+    "occurred_at_ms": 1790109477880,
+    "payload": {
+      "step_index": 2,
+      "checkpoint_assertions": [],
+      "run_id": "run_553fbde5df52"
+    }
+  },
+  {
+    "event_id": "evt_eef89350b5cf4742",
+    "topic": "discovery.events",
+    "offset": 11,
+    "correlation_id": "corr_4d31a5f16499471f942e6247551f4edc",
+    "event_type": "ObservationCaptured",
+    "occurred_at_ms": 1790109478088,
+    "payload": {
+      "step_index": 3,
+      "a11y_snapshot": "- table:\n  - rowgroup:\n    - row \"Branch Teller System \u2014 Member Detail\":\n      - cell \"Branch Teller System \u2014 Member Detail\"\n- table:\n  - rowgroup:\n    - 'row \"Member ID: 1001\"':\n      - cell \"Member ID:\"\n      - cell \"1001\"\n    - 'row \"Name: Alice Nguyen (Default Branch)\"':\n      - cell \"Name:\"\n      - cell \"Alice Nguyen (Default Branch)\"\n    - 'row \"Current Balance: $ 4,823.11\"':\n      - cell \"Current Balance:\"\n      - cell \"$ 4,823.11\":\n        - table:\n          - rowgroup:\n            - row \"$ 4,823.11\":\n              - cell \"$ 4,823.11\":\n                - table:\n                  - rowgroup:\n                    - row \"$ 4,823.11\":\n                      - cell \"$\"\n                      - cell \"4,823.11\"\n- link \"Open Sub-Account\":\n  - /url: /default/members/1001/sub-accounts/new\n- text: \"|\"\n- link \"New Search\":\n  - /url: /default/members",
+      "url": "http://localhost:4000/default/members/1001",
+      "run_id": "run_553fbde5df52"
+    }
+  },
+  {
+    "event_id": "evt_9e861e3723e441ec",
+    "topic": "discovery.events",
+    "offset": 12,
+    "correlation_id": "corr_4d31a5f16499471f942e6247551f4edc",
+    "event_type": "ActionDecided",
+    "occurred_at_ms": 1790109480535,
+    "payload": {
+      "step_index": 3,
+      "action_type": "assert",
+      "target_description": "Member detail page shows Member ID 1001",
+      "locator_candidates": [
+        "text=Member ID:",
+        "text=1001"
+      ],
+      "params": {
+        "assertion": "text_present",
+        "expected": "1001"
+      },
+      "risk_tag": "safe",
+      "rationale": "Confirm we are on the correct member's detail page before extracting balance.",
+      "param_bindings": {
+        "expected": "member_id"
+      },
+      "run_id": "run_553fbde5df52"
+    }
+  },
+  {
+    "event_id": "evt_23817cb9c95343aa",
+    "topic": "discovery.events",
+    "offset": 13,
+    "correlation_id": "corr_4d31a5f16499471f942e6247551f4edc",
+    "event_type": "ActionExecuted",
+    "occurred_at_ms": 1790109480537,
+    "payload": {
+      "step_index": 3,
+      "locator_used": null,
+      "outcome": "success",
+      "error_message": null,
+      "run_id": "run_553fbde5df52"
+    }
+  },
+  {
+    "event_id": "evt_8d73f98c0963452a",
+    "topic": "discovery.events",
+    "offset": 14,
+    "correlation_id": "corr_4d31a5f16499471f942e6247551f4edc",
+    "event_type": "StepSucceeded",
+    "occurred_at_ms": 1790109480539,
+    "payload": {
+      "step_index": 3,
+      "checkpoint_assertions": [],
+      "run_id": "run_553fbde5df52"
+    }
+  },
+  {
+    "event_id": "evt_9cb6593f37634c1d",
+    "topic": "discovery.events",
+    "offset": 15,
+    "correlation_id": "corr_4d31a5f16499471f942e6247551f4edc",
+    "event_type": "ObservationCaptured",
+    "occurred_at_ms": 1790109480540,
+    "payload": {
+      "step_index": 4,
+      "a11y_snapshot": "- table:\n  - rowgroup:\n    - row \"Branch Teller System \u2014 Member Detail\":\n      - cell \"Branch Teller System \u2014 Member Detail\"\n- table:\n  - rowgroup:\n    - 'row \"Member ID: 1001\"':\n      - cell \"Member ID:\"\n      - cell \"1001\"\n    - 'row \"Name: Alice Nguyen (Default Branch)\"':\n      - cell \"Name:\"\n      - cell \"Alice Nguyen (Default Branch)\"\n    - 'row \"Current Balance: $ 4,823.11\"':\n      - cell \"Current Balance:\"\n      - cell \"$ 4,823.11\":\n        - table:\n          - rowgroup:\n            - row \"$ 4,823.11\":\n              - cell \"$ 4,823.11\":\n                - table:\n                  - rowgroup:\n                    - row \"$ 4,823.11\":\n                      - cell \"$\"\n                      - cell \"4,823.11\"\n- link \"Open Sub-Account\":\n  - /url: /default/members/1001/sub-accounts/new\n- text: \"|\"\n- link \"New Search\":\n  - /url: /default/members",
+      "url": "http://localhost:4000/default/members/1001",
+      "run_id": "run_553fbde5df52"
+    }
+  },
+  {
+    "event_id": "evt_775a00f699184fc0",
+    "topic": "discovery.events",
+    "offset": 16,
+    "correlation_id": "corr_4d31a5f16499471f942e6247551f4edc",
+    "event_type": "ActionDecided",
+    "occurred_at_ms": 1790109482975,
+    "payload": {
+      "step_index": 4,
+      "action_type": "extract",
+      "target_description": "Current Balance value for member 1001",
+      "locator_candidates": [
+        "text=4,823.11",
+        "css=table >> text=4,823.11"
+      ],
+      "params": {
+        "output_name": "current_balance"
+      },
+      "risk_tag": "safe",
+      "rationale": "The member detail page confirmed for member 1001 shows the current balance value, which needs to be extracted as the goal output.",
+      "param_bindings": {},
+      "run_id": "run_553fbde5df52"
+    }
+  },
+  {
+    "event_id": "evt_94196e6d10d8407c",
+    "topic": "discovery.events",
+    "offset": 17,
+    "correlation_id": "corr_4d31a5f16499471f942e6247551f4edc",
+    "event_type": "ActionExecuted",
+    "occurred_at_ms": 1790109482977,
+    "payload": {
+      "step_index": 4,
+      "locator_used": "text=4,823.11",
+      "outcome": "success",
+      "error_message": null,
+      "run_id": "run_553fbde5df52"
+    }
+  },
+  {
+    "event_id": "evt_b9e6431d79464e87",
+    "topic": "discovery.events",
+    "offset": 18,
+    "correlation_id": "corr_4d31a5f16499471f942e6247551f4edc",
+    "event_type": "StepSucceeded",
+    "occurred_at_ms": 1790109482978,
+    "payload": {
+      "step_index": 4,
+      "checkpoint_assertions": [],
+      "run_id": "run_553fbde5df52"
+    }
+  },
+  {
+    "event_id": "evt_76f6ba5894ff417a",
+    "topic": "discovery.events",
+    "offset": 19,
+    "correlation_id": "corr_4d31a5f16499471f942e6247551f4edc",
+    "event_type": "ObservationCaptured",
+    "occurred_at_ms": 1790109482980,
+    "payload": {
+      "step_index": 5,
+      "a11y_snapshot": "- table:\n  - rowgroup:\n    - row \"Branch Teller System \u2014 Member Detail\":\n      - cell \"Branch Teller System \u2014 Member Detail\"\n- table:\n  - rowgroup:\n    - 'row \"Member ID: 1001\"':\n      - cell \"Member ID:\"\n      - cell \"1001\"\n    - 'row \"Name: Alice Nguyen (Default Branch)\"':\n      - cell \"Name:\"\n      - cell \"Alice Nguyen (Default Branch)\"\n    - 'row \"Current Balance: $ 4,823.11\"':\n      - cell \"Current Balance:\"\n      - cell \"$ 4,823.11\":\n        - table:\n          - rowgroup:\n            - row \"$ 4,823.11\":\n              - cell \"$ 4,823.11\":\n                - table:\n                  - rowgroup:\n                    - row \"$ 4,823.11\":\n                      - cell \"$\"\n                      - cell \"4,823.11\"\n- link \"Open Sub-Account\":\n  - /url: /default/members/1001/sub-accounts/new\n- text: \"|\"\n- link \"New Search\":\n  - /url: /default/members",
+      "url": "http://localhost:4000/default/members/1001",
+      "run_id": "run_553fbde5df52"
+    }
+  },
+  {
+    "event_id": "evt_908dfb1276874699",
+    "topic": "discovery.events",
+    "offset": 20,
+    "correlation_id": "corr_4d31a5f16499471f942e6247551f4edc",
+    "event_type": "ActionDecided",
+    "occurred_at_ms": 1790109486012,
+    "payload": {
+      "step_index": 5,
+      "action_type": "finish",
+      "target_description": "Task complete - balance retrieved",
+      "locator_candidates": [],
+      "params": {
+        "outputs": {
+          "member_id": "1001",
+          "name": "Alice Nguyen (Default Branch)",
+          "current_balance": "$4,823.11"
+        },
+        "success_condition": "Member 1001's current balance was located and extracted from the Member Detail page"
+      },
+      "risk_tag": "safe",
+      "rationale": "The member detail page for 1001 has been loaded, verified via assertion, and the current balance value was already extracted. All goal requirements are satisfied, so the task can be finished with the outputs reported.",
+      "param_bindings": {
+        "success_condition": "member_id"
+      },
+      "run_id": "run_553fbde5df52"
+    }
+  },
+  {
+    "event_id": "evt_3470499149ac4b2d",
+    "topic": "discovery.events",
+    "offset": 21,
+    "correlation_id": "corr_4d31a5f16499471f942e6247551f4edc",
+    "event_type": "RunSucceeded",
+    "occurred_at_ms": 1790109486013,
+    "payload": {
+      "capability_id": "member_balance_lookup",
+      "tenant_id": "default",
+      "goal": "Look up member 1001 and report their current balance",
+      "outputs": {
+        "member_id": "1001",
+        "name": "Alice Nguyen (Default Branch)",
+        "current_balance": "$4,823.11"
+      },
+      "success_condition": "Member 1001's current balance was located and extracted from the Member Detail page",
+      "run_id": "run_553fbde5df52"
+    }
+  }
+]
