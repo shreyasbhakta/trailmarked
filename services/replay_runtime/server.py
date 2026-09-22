@@ -159,7 +159,8 @@ class ReplayRuntimeServicer(replay_pb2_grpc.ReplayRuntimeServicer):
                 failure_context=failure_context,
             )
             self._emit(correlation_id, "ReplayHardFailure", {
-                "run_id": run_id, "failed_step_id": result.failed_step_id, "dead_letter_event_id": dead_letter_event_id,
+                "run_id": run_id, "capability_id": request.capability_id, "version": artifact.version,
+                "failed_step_id": result.failed_step_id, "dead_letter_event_id": dead_letter_event_id,
                 "context": failure_context,
             })
             self._escalation.request_intervention(
@@ -169,7 +170,10 @@ class ReplayRuntimeServicer(replay_pb2_grpc.ReplayRuntimeServicer):
             )
         elif result.outcome == "BUSINESS_OUTCOME":
             self._breaker.record_success(target_key)
-            self._emit(correlation_id, "ReplaySucceeded", {"run_id": run_id, "outputs": result.outputs, "retry_count": result.retry_count})
+            self._emit(correlation_id, "ReplaySucceeded", {
+                "run_id": run_id, "capability_id": request.capability_id, "version": artifact.version,
+                "outputs": result.outputs, "retry_count": result.retry_count,
+            })
         else:
             self._breaker.record_failure(target_key)
 

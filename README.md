@@ -42,7 +42,8 @@ outcome classifier, dead-letter path, and human escalation in action).
    classified into exactly one outcome: a legitimate `BUSINESS_OUTCOME`
    (success, or an expected result like "member not found"), a `RECOVERABLE`
    transient issue (retried with backoff), or a `HARD_FAILURE` (dead-lettered
-   with full expected-vs-observed context and a screenshot).
+   with full expected-vs-observed context and a screenshot). Each outcome
+   also updates that capability version's **confidence** — see below.
 4. **Escalation.** A hard failure automatically opens a human-in-the-loop
    saga. An operator can claim the **exact same live browser session** the
    automation was using, act on it, and release control — never a fresh
@@ -170,6 +171,32 @@ with `--tenant overlay_demo`, or replay the existing capability with
 locator overlay instead of the base capability's locators — the mechanism
 for reusing one capability across many institutions running the same
 underlying vendor product.
+
+### Confidence tracking — what happens if the recorded flow goes stale
+
+Nothing checks a capability against the live app *before* a replay starts —
+drift is only ever discovered by actually trying (a locator's fallback
+chain absorbs small changes silently; a checkpoint catches a wrong page
+before data gets extracted off it; a hard failure gets dead-lettered and
+escalated). To make that history visible instead of implicit, every replay
+updates the capability version's confidence:
+
+- `last_validated_at_ms` — set whenever a replay reaches `BUSINESS_OUTCOME`.
+- `consecutive_hard_failures` — incremented on `HARD_FAILURE`, reset on success.
+- a derived **`FRESH` / `NEEDS_REVIEW`** label (`NEEDS_REVIEW` if it's never
+  been validated, or has hard-failed twice in a row since it last was) —
+  shown as a badge next to each version in the Registry tab.
+
+Run the demo's command 4 (or 2 replay calls with a bad input in a row) and
+watch a version flip from `FRESH` to `NEEDS_REVIEW` in the Registry tab.
+
+This is intentionally just a signal, not an action. It does **not**
+automatically kick off a new discovery run, and it doesn't gate replay by
+itself — a system that decided on its own when to re-spend an LLM call
+against a live production app would break the platform's own core rule that
+replay never involves the LLM and a human is always the one who decides to
+re-invoke it. `NEEDS_REVIEW` just means: someone should look at this before
+trusting it unattended.
 
 ## Running without live services
 

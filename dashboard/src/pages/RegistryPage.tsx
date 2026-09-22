@@ -77,19 +77,31 @@ function CapabilityDetailView({ capabilityId }: { capabilityId: string }) {
           <table className="w-full text-sm">
             <thead>
               <tr className="text-left text-[var(--text-dim)] text-xs">
-                <th className="pb-2">Version</th>
-                <th className="pb-2">Compatibility</th>
-                <th className="pb-2">Discovery Run</th>
+                <th className="pb-2 pr-4 whitespace-nowrap">Version</th>
+                <th className="pb-2 pr-4 whitespace-nowrap">Compatibility</th>
+                <th className="pb-2 pr-4 whitespace-nowrap">Discovery Run</th>
+                <th className="pb-2 pr-4 whitespace-nowrap">Confidence</th>
               </tr>
             </thead>
             <tbody>
               {detail.versions.map((v) => (
                 <tr key={v.version} className="border-t border-[var(--border)]">
-                  <td className="py-1.5 mono">v{v.version}</td>
-                  <td className="py-1.5">
+                  <td className="py-1.5 pr-4 mono">v{v.version}</td>
+                  <td className="py-1.5 pr-4">
                     <Badge label={v.compatibility} />
                   </td>
-                  <td className="py-1.5 mono text-xs text-[var(--text-dim)]">{v.discoveryRunId}</td>
+                  <td className="py-1.5 pr-4 mono text-xs text-[var(--text-dim)]">{v.discoveryRunId}</td>
+                  <td className="py-1.5 pr-4">
+                    <div className="flex items-center gap-1.5">
+                      <Badge label={v.confidence} />
+                      <span className="mono text-xs text-[var(--text-dim)]" title={v.lastValidatedAtMs ? new Date(v.lastValidatedAtMs).toISOString() : undefined}>
+                        {v.lastValidatedAtMs
+                          ? `validated ${new Date(v.lastValidatedAtMs).toLocaleDateString()}`
+                          : "never validated"}
+                        {v.consecutiveHardFailures > 0 && ` · ${v.consecutiveHardFailures} hard failure${v.consecutiveHardFailures > 1 ? "s" : ""} in a row`}
+                      </span>
+                    </div>
+                  </td>
                 </tr>
               ))}
             </tbody>

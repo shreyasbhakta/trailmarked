@@ -48,6 +48,9 @@ class CapabilityVersion:
     compatibility: str
     discovery_run_id: str
     compiled_at_ms: float
+    last_validated_at_ms: float | None
+    consecutive_hard_failures: int
+    confidence: str
 
 
 @strawberry.type
@@ -58,7 +61,11 @@ class Capability:
     @strawberry.field
     def versions(self) -> list[CapabilityVersion]:
         return [
-            CapabilityVersion(version=v["version"], compatibility=v["compatibility"], discovery_run_id=v["discovery_run_id"], compiled_at_ms=v["compiled_at_ms"])
+            CapabilityVersion(
+                version=v["version"], compatibility=v["compatibility"], discovery_run_id=v["discovery_run_id"],
+                compiled_at_ms=v["compiled_at_ms"], last_validated_at_ms=v["last_validated_at_ms"],
+                consecutive_hard_failures=v["consecutive_hard_failures"], confidence=v["confidence"],
+            )
             for v in _store.version_history(self.capability_id)
         ]
 

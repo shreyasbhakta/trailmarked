@@ -37,6 +37,9 @@ export interface CapabilityVersion {
   compatibility: "BACKWARD" | "FORWARD" | "BREAKING";
   discoveryRunId: string;
   compiledAtMs: number;
+  lastValidatedAtMs: number | null;
+  consecutiveHardFailures: number;
+  confidence: "FRESH" | "NEEDS_REVIEW";
 }
 
 export interface EventEntry {
@@ -72,7 +75,7 @@ export function getCapabilityDetail(capabilityId: string) {
     `query($id: String!) {
       capability(capabilityId: $id) {
         capabilityId latestVersion artifactJson
-        versions { version compatibility discoveryRunId compiledAtMs }
+        versions { version compatibility discoveryRunId compiledAtMs lastValidatedAtMs consecutiveHardFailures confidence }
         recentRuns(limit: 20) { runId kind tenantId correlationId status startedAtMs timeline { eventType offset occurredAtMs payloadJson } }
       }
     }`,

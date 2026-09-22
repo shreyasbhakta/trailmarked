@@ -23,6 +23,7 @@ _TERMINAL_STATUS_EVENTS = {
     "RunSucceeded": "SUCCEEDED", "RunFailed": "FAILED",
     "ReplaySucceeded": "SUCCEEDED", "ReplayHardFailure": "HARD_FAILURE",
 }
+_VALIDATION_OUTCOME_BY_EVENT = {"ReplaySucceeded": "BUSINESS_OUTCOME", "ReplayHardFailure": "HARD_FAILURE"}
 
 
 def _run_id_for(topic: str, payload: dict) -> str | None:
@@ -67,6 +68,14 @@ class Projector:
                 self._store.append_run_event(run_id, topic, event.offset, event.event_type, event.occurred_at_ms, json.dumps(event.payload))
                 if event.event_type in _TERMINAL_STATUS_EVENTS:
                     self._store.set_run_status(run_id, _TERMINAL_STATUS_EVENTS[event.event_type])
+                if event.event_type in _VALIDATION_OUTCOME_BY_EVENT:
+                    capability_id = event.payload.get("capability_id")
+                    version = event.payload.get("version")
+                    if capability_id and version:
+                        self._store.record_validation(
+                            capability_id=capability_id, version=version, tenant_scope="*",
+                            outcome=_VALIDATION_OUTCOME_BY_EVENT[event.event_type],
+                        )
             if events:
                 self._event_log.commit_offset(topic, CONSUMER_GROUP, event.offset)
         return len(events)

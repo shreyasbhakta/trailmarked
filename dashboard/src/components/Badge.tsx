@@ -20,6 +20,8 @@ const COLORS: Record<string, string> = {
   TERMINATED: "bg-[#7c828f]/15 text-[#7c828f] border-[#7c828f]/30",
   safe: "bg-[#3fb950]/15 text-[#3fb950] border-[#3fb950]/30",
   risky: "bg-[#f85149]/15 text-[#f85149] border-[#f85149]/30",
+  FRESH: "bg-[#3fb950]/15 text-[#3fb950] border-[#3fb950]/30",
+  NEEDS_REVIEW: "bg-[#d29922]/15 text-[#d29922] border-[#d29922]/30",
 };
 
 export default function Badge({ label }: { label: string }) {

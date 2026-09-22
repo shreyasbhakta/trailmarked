@@ -128,6 +128,23 @@ dead-letters with the full failure context (step id, expected, observed) via
 never applied to `BUSINESS_OUTCOME` or `HARD_FAILURE` — only to the
 recoverable bucket, and only bounded.
 
+**Confidence tracking**: the recorded flow is stable but the live app isn't
+guaranteed to stay that way forever, and nothing in the replay path detects
+drift *before* attempting a run — detection is reactive, discovered by
+actually trying (locator fallback chains absorb small drift silently;
+checkpoints catch state-level drift mid-flow; retries and the circuit
+breaker absorb transient failures). To make that history visible rather than
+implicit, the registry's projector (`services/capability_registry/
+projector.py`) consumes `ReplaySucceeded`/`ReplayHardFailure` off the event
+log and updates each capability version's `last_validated_at_ms` and
+`consecutive_hard_failures` (`store.py:record_validation`), from which a
+`confidence` label is derived: `FRESH` if it's ever been proven and hasn't
+hard-failed twice in a row since, `NEEDS_REVIEW` otherwise — surfaced as a
+badge in the Registry tab. This is deliberately just a signal, not an
+action: it does not automatically re-run discovery or gate replay by itself
+(see Cuts) — a human decides whether `NEEDS_REVIEW` means "re-discover this"
+or "investigate the target app."
+
 **Correlation IDs** are generated once per run (`shared/correlation.py`) and
 threaded through every event payload, every gRPC call, and every dashboard
 timeline entry, so `evidence/` can reconstruct one run end-to-end from a
@@ -212,6 +229,13 @@ Rate limiting is covered under Architecture (REST invocation surface).
   "minimal operator surface" is exactly that — three buttons and a raw
   locator/value input in the dashboard, not a rendered live view of the
   page, no cursor-sharing, no multi-viewer support.
+- **No automatic re-discovery.** Confidence tracking (above) surfaces
+  `NEEDS_REVIEW`; it deliberately does not act on it. Auto-triggering (or
+  auto-prompting) a fresh discovery run when a capability looks stale was a
+  conscious line not to cross — it would mean the system deciding on its own
+  when to spend a new LLM-driven run against a live app, which quietly
+  breaks the platform's own core promise that replay never involves the LLM
+  and that a human is always the one who decides to re-invoke it.
 - **Resuming the agent after a human releases control** is modeled as a
   saga transition (`RESUMED`) but not actually implemented — the browser
   session is closed on every release regardless of `resume_agent`, and

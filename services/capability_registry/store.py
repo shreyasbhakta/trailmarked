@@ -13,6 +13,18 @@ from pathlib import Path
 
 DB_PATH = Path(__file__).parent / "registry.db"
 
+# A version whose most recent replays keep hard-failing has drifted from the
+# live app it was recorded against; past this many failures in a row it's
+# no longer safe to trust unattended, regardless of how long ago it was
+# last proven to work.
+HARD_FAILURE_CONFIDENCE_THRESHOLD = 2
+
+
+def _confidence(last_validated_at_ms: int | None, consecutive_hard_failures: int) -> str:
+    if last_validated_at_ms is None or consecutive_hard_failures >= HARD_FAILURE_CONFIDENCE_THRESHOLD:
+        return "NEEDS_REVIEW"
+    return "FRESH"
+
 _SCHEMA = """
 CREATE TABLE IF NOT EXISTS capabilities (
     capability_id TEXT NOT NULL,
@@ -22,6 +34,8 @@ CREATE TABLE IF NOT EXISTS capabilities (
     artifact_json TEXT NOT NULL,
     discovery_run_id TEXT NOT NULL,
     compiled_at_ms INTEGER NOT NULL,
+    last_validated_at_ms INTEGER,
+    consecutive_hard_failures INTEGER NOT NULL DEFAULT 0,
     PRIMARY KEY (capability_id, version, tenant_scope)
 );
 
@@ -66,7 +80,18 @@ class RegistryStore:
         self._conn = sqlite3.connect(str(db_path), check_same_thread=False)
         self._conn.execute("PRAGMA journal_mode=WAL")
         self._conn.executescript(_SCHEMA)
+        self._migrate_confidence_columns()
         self._conn.commit()
+
+    def _migrate_confidence_columns(self) -> None:
+        # CREATE TABLE IF NOT EXISTS doesn't add columns to a table that
+        # already existed under the old schema, so a plain-old dev database
+        # needs an explicit, idempotent column add.
+        existing = {row[1] for row in self._conn.execute("PRAGMA table_info(capabilities)")}
+        if "last_validated_at_ms" not in existing:
+            self._conn.execute("ALTER TABLE capabilities ADD COLUMN last_validated_at_ms INTEGER")
+        if "consecutive_hard_failures" not in existing:
+            self._conn.execute("ALTER TABLE capabilities ADD COLUMN consecutive_hard_failures INTEGER NOT NULL DEFAULT 0")
 
     @property
     def conn(self) -> sqlite3.Connection:
@@ -79,7 +104,8 @@ class RegistryStore:
     def latest_version(self, capability_id: str, tenant_scope: str) -> dict | None:
         with self._lock:
             row = self._conn.execute(
-                "SELECT version, compatibility, artifact_json, discovery_run_id, compiled_at_ms FROM capabilities "
+                "SELECT version, compatibility, artifact_json, discovery_run_id, compiled_at_ms, "
+                "last_validated_at_ms, consecutive_hard_failures FROM capabilities "
                 "WHERE capability_id = ? AND tenant_scope = ? ORDER BY version DESC LIMIT 1",
                 (capability_id, tenant_scope),
             ).fetchone()
@@ -91,6 +117,9 @@ class RegistryStore:
                 "artifact_json": row[2],
                 "discovery_run_id": row[3],
                 "compiled_at_ms": row[4],
+                "last_validated_at_ms": row[5],
+                "consecutive_hard_failures": row[6],
+                "confidence": _confidence(row[5], row[6]),
             }
 
     def insert_version(
@@ -113,7 +142,8 @@ class RegistryStore:
     def get_version(self, capability_id: str, version: int, tenant_scope: str) -> dict | None:
         with self._lock:
             row = self._conn.execute(
-                "SELECT version, compatibility, artifact_json, discovery_run_id, compiled_at_ms FROM capabilities "
+                "SELECT version, compatibility, artifact_json, discovery_run_id, compiled_at_ms, "
+                "last_validated_at_ms, consecutive_hard_failures FROM capabilities "
                 "WHERE capability_id = ? AND version = ? AND tenant_scope = ?",
                 (capability_id, version, tenant_scope),
             ).fetchone()
@@ -125,18 +155,46 @@ class RegistryStore:
                 "artifact_json": row[2],
                 "discovery_run_id": row[3],
                 "compiled_at_ms": row[4],
+                "last_validated_at_ms": row[5],
+                "consecutive_hard_failures": row[6],
+                "confidence": _confidence(row[5], row[6]),
             }
 
     def version_history(self, capability_id: str, tenant_scope: str = "*") -> list[dict]:
         with self._lock:
             rows = self._conn.execute(
-                "SELECT version, compatibility, discovery_run_id, compiled_at_ms FROM capabilities "
+                "SELECT version, compatibility, discovery_run_id, compiled_at_ms, "
+                "last_validated_at_ms, consecutive_hard_failures FROM capabilities "
                 "WHERE capability_id = ? AND tenant_scope = ? ORDER BY version ASC",
                 (capability_id, tenant_scope),
             ).fetchall()
             return [
-                {"version": r[0], "compatibility": r[1], "discovery_run_id": r[2], "compiled_at_ms": r[3]} for r in rows
+                {
+                    "version": r[0], "compatibility": r[1], "discovery_run_id": r[2], "compiled_at_ms": r[3],
+                    "last_validated_at_ms": r[4], "consecutive_hard_failures": r[5], "confidence": _confidence(r[4], r[5]),
+                }
+                for r in rows
             ]
+
+    def record_validation(self, capability_id: str, version: int, tenant_scope: str, outcome: str) -> None:
+        """Called by the projector as it consumes ReplaySucceeded/ReplayHardFailure
+        off the event log — this is how a capability's confidence tracks its
+        actual recent replay history instead of just how it looked at compile time.
+        """
+        with self._lock:
+            if outcome == "BUSINESS_OUTCOME":
+                self._conn.execute(
+                    "UPDATE capabilities SET last_validated_at_ms = ?, consecutive_hard_failures = 0 "
+                    "WHERE capability_id = ? AND version = ? AND tenant_scope = ?",
+                    (int(time.time() * 1000), capability_id, version, tenant_scope),
+                )
+            elif outcome == "HARD_FAILURE":
+                self._conn.execute(
+                    "UPDATE capabilities SET consecutive_hard_failures = consecutive_hard_failures + 1 "
+                    "WHERE capability_id = ? AND version = ? AND tenant_scope = ?",
+                    (capability_id, version, tenant_scope),
+                )
+            self._conn.commit()
 
     def list_capabilities(self) -> list[dict]:
         with self._lock:
