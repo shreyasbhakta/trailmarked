@@ -14,6 +14,10 @@ making decisions ever again.
 > **The model discovers once. The artifact becomes a reusable capability.
 > Deterministic replay is how a production agent invokes it.**
 
+<p align="center">
+  <img src="docs/diagrams/flow-diagram.svg" alt="Trailmarked flow: Discovery → Record → Registry → Replay → Escalate" width="820">
+</p>
+
 This repository is a working prototype of that idea, built end-to-end against
 a self-contained mock banking application (so it runs with zero external
 dependencies beyond an LLM API key). See [`REPORT.md`](REPORT.md) for the full
@@ -43,6 +47,17 @@ outcome classifier, dead-letter path, and human escalation in action).
    saga. An operator can claim the **exact same live browser session** the
    automation was using, act on it, and release control — never a fresh
    session, and every hand-off step is itself an event.
+
+## Architecture
+
+<p align="center">
+  <img src="docs/diagrams/architecture-diagram.png" alt="Trailmarked architecture: Discovery Plane, Event Log, Capability Registry, Replay Runtime, Outcome Classifier, Escalation Saga, and the Safety Layer, wired together over gRPC/REST/GraphQL" width="900">
+</p>
+
+Every arrow above is a real, typed boundary, not a diagram simplification —
+see [`REPORT.md`](REPORT.md) → *Architecture* for why gRPC internally, REST
+for agent invocation, and GraphQL for the dashboard's read layer, each for a
+different reason.
 
 ## What's in the box
 
